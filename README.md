@@ -7,8 +7,8 @@ Program will output:
 ```json
 {
     "about": {
+        "phone": "testsdsadss",
         "email": "testsdsad",
-        "phone": "testsdsadiiii",
     },
 }
 ```
