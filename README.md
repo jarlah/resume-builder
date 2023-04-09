@@ -2,7 +2,7 @@
 
 Will output:
 
-```
+```json
 {
     "about": {
         "email": "testsdsad",
