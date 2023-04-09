@@ -13,4 +13,11 @@ Program will output:
 }
 ```
 
-even if cv.ini is full of whitespaces
+even if cv.ini is full of whitespaces.
+
+Format .pest files:
+
+```
+cargo install pest_fmt
+pestfmt .
+```
