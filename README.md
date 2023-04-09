@@ -1,6 +1,8 @@
 # resume-builder
 
-Will output:
+Run with `cargo run`
+
+Program will output:
 
 ```json
 {
