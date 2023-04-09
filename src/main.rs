@@ -16,14 +16,17 @@ fn get_value(pair: Pair<Rule>) -> Result<&str, String> {
     Ok(val)
 }
 
-fn main() {
+fn main() -> Result<(), ()> {
     let unparsed_file = fs::read_to_string("cv.ini")
-        .expect("read file");
+        .map_err(|err| eprintln!("ERROR: Failed to read file: {err}"))
+        ?;
 
     let file = CVParser::parse(Rule::cv, &unparsed_file)
-        .expect("successful parse")
+        .map_err(|err| eprintln!("ERROR: Failed to parse file: {err}"))
+        ?
         .next()
-        .unwrap();
+        .ok_or_else(|| eprintln!("ERROR: File is empty"))
+        ?;
 
     let mut properties: HashMap<&str, HashMap<&str, &str>> = HashMap::new();
 
@@ -34,11 +37,15 @@ fn main() {
                 for inner_rule in line.into_inner() {
                     match inner_rule.as_rule() {
                         Rule::email => {
-                            let value = get_value(inner_rule).unwrap();
+                            let value = get_value(inner_rule)
+                                .map_err(|err| eprintln!("ERROR: {err}"))
+                                ?;
                             section.insert("email", value);
                         }
                         Rule::phone => {
-                            let value = get_value(inner_rule).unwrap();
+                            let value = get_value(inner_rule)
+                                .map_err(|err| eprintln!("ERROR: {err}"))
+                                ?;
                             section.insert("phone", value);
                         }
                         Rule::EOI => todo!(),
@@ -52,4 +59,6 @@ fn main() {
     }
 
     println!("{:#?}", properties);
+
+    Ok(())
 }
