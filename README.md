@@ -8,7 +8,7 @@ Program will output:
 {
     "about": {
         "email": "testsdsad@asdddas.com",
-        "phone": "+4712345678",
+        "phone": "+47 12345678",
     },
 }
 ```
