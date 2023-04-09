@@ -2,9 +2,9 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 use pest::iterators::Pair;
+use pest::Parser;
 use std::collections::HashMap;
 use std::fs;
-use pest::Parser;
 
 #[derive(Parser)]
 #[grammar = "cv.pest"]
@@ -18,15 +18,12 @@ fn get_value(pair: Pair<Rule>) -> Result<&str, String> {
 
 fn main() -> Result<(), ()> {
     let unparsed_file = fs::read_to_string("cv.ini")
-        .map_err(|err| eprintln!("ERROR: Failed to read file: {err}"))
-        ?;
+        .map_err(|err| eprintln!("ERROR: Failed to read file: {err}"))?;
 
     let file = CVParser::parse(Rule::cv, &unparsed_file)
-        .map_err(|err| eprintln!("ERROR: Failed to parse file: {err}"))
-        ?
+        .map_err(|err| eprintln!("ERROR: Failed to parse file: {err}"))?
         .next()
-        .ok_or_else(|| eprintln!("ERROR: File is empty"))
-        ?;
+        .ok_or_else(|| eprintln!("ERROR: File is empty"))?;
 
     let mut properties: HashMap<&str, HashMap<&str, &str>> = HashMap::new();
 
@@ -37,15 +34,13 @@ fn main() -> Result<(), ()> {
                 for inner_rule in line.into_inner() {
                     match inner_rule.as_rule() {
                         Rule::email => {
-                            let value = get_value(inner_rule)
-                                .map_err(|err| eprintln!("ERROR: {err}"))
-                                ?;
+                            let value =
+                                get_value(inner_rule).map_err(|err| eprintln!("ERROR: {err}"))?;
                             section.insert("email", value);
                         }
                         Rule::phone => {
-                            let value = get_value(inner_rule)
-                                .map_err(|err| eprintln!("ERROR: {err}"))
-                                ?;
+                            let value =
+                                get_value(inner_rule).map_err(|err| eprintln!("ERROR: {err}"))?;
                             section.insert("phone", value);
                         }
                         Rule::EOI => todo!(),
