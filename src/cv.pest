@@ -1,0 +1,12 @@
+cv = {
+    SOI ~
+    about ~
+    EOI
+}
+
+about = { "[about]" ~ NEWLINE ~ email ~ NEWLINE ~ phone }
+email = { "email" ~ "=" ~ value }
+phone = { "phone" ~ "=" ~ value }
+value = @{ ASCII_ALPHANUMERIC* }
+
+WHITESPACE = _{ " " }
