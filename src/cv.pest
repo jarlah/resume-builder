@@ -8,7 +8,7 @@ about = { ^"[about]" ~ NEWLINE ~ email ~ NEWLINE ~ phone }
 email = { ^"email" ~ "=" ~ email_value }
 phone = { ^"phone" ~ "=" ~ phone_value }
 
-phone_value = @{ ("+" ~ NUMBER{1,2} ~ NUMBER*) | NUMBER* }
+phone_value = @{ ("+" ~ NUMBER{1,2} ~ WHITESPACE? ~ NUMBER*) | NUMBER* }
 
 email_username = { (ASCII_ALPHANUMERIC | "." | "+" | "-" | "_" )* }
 email_domain = { ASCII_ALPHANUMERIC*  }
