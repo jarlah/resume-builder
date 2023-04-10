@@ -36,14 +36,11 @@ fn parse_about(rule: Pair<Rule>) -> Result<HashMap<&str, String>, ()> {
     for inner_rule in rule.into_inner() {
         match inner_rule.as_rule() {
             Rule::email => {
-                let value = get_value(inner_rule)?.to_owned();
-                about_section.insert("email", value);
+                about_section.insert("email", get_value(inner_rule)?.to_owned());
             }
             Rule::phone => {
-                let value = get_value(inner_rule)?.to_owned();
-                about_section.insert("phone", value);
+                about_section.insert("phone", get_value(inner_rule)?.to_owned());
             }
-            Rule::EOI => todo!(),
             _ => unreachable!(),
         }
     }
