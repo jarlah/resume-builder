@@ -12,7 +12,7 @@ pub struct CVParser;
 #[derive(Debug, Default)]
 pub struct About {
     pub phone: String,
-    pub email: String
+    pub email: String,
 }
 
 #[derive(Debug, Default)]
