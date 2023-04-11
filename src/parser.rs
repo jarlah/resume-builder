@@ -10,8 +10,8 @@ pub struct CVData {
 }
 
 fn parse_property(input: &str) -> (&str, &str) {
-    let (_, input) = input.split_once("=").unwrap_or((input, ""));
-    let (value, input) = input.split_once("\n").unwrap_or((input, ""));
+    let (_, input) = input.split_once('=').unwrap_or((input, ""));
+    let (value, input) = input.split_once('\n').unwrap_or((input, ""));
     (value.trim(), input)
 }
 
