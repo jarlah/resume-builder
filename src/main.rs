@@ -1,17 +1,13 @@
-pub mod parser;
-use std::fs;
-
-use crate::parser::CVData;
-
-fn read_file(file: &str) -> Result<String, ()> {
-    fs::read_to_string(file).map_err(|err| eprintln!("ERROR: Failed to read file: {err}"))
-}
+use ini::Ini;
 
 fn main() -> Result<(), ()> {
-    let mut cv_data: CVData = Default::default();
-    let unparsed_file = read_file("cv.ini")?;
-    let (about, _) = parser::parse_about(&unparsed_file);
-    cv_data.about = about;
-    println!("{:#?}", cv_data);
+    let conf = Ini::load_from_file("cv.ini")
+        .map_err(|err| eprintln!("ERROR: Failed to load ini file: {err}"))?;
+    for (sec, prop) in &conf {
+        println!("Section: {:?}", sec);
+        for (key, value) in prop.iter() {
+            println!("  {:?}:{:?}", key, value);
+        }
+    }
     Ok(())
 }
