@@ -3,12 +3,34 @@ extern crate pest;
 extern crate pest_derive;
 use pest::iterators::Pair;
 use pest::Parser;
-use std::collections::HashMap;
 use std::fs;
 
 #[derive(Parser)]
 #[grammar = "cv.pest"]
 pub struct CVParser;
+
+#[derive(Debug)]
+pub struct About {
+    pub phone: String,
+    pub email: String
+}
+
+impl About {
+    fn new() -> About {
+        About { phone: "".to_owned(), email: "".to_owned() }
+    }
+}
+
+#[derive(Debug)]
+pub struct CVData {
+    pub about: About,
+}
+
+impl CVData {
+    fn new() -> CVData {
+        CVData { about: About::new() }
+    }
+}
 
 fn get_value(pair: Pair<Rule>) -> Result<&str, ()> {
     let mut inner_rules = pair.into_inner();
@@ -31,35 +53,32 @@ fn parse_file(file: &str) -> Result<Pair<Rule>, ()> {
         .ok_or_else(|| eprintln!("ERROR: File is empty"))
 }
 
-fn parse_about(rule: Pair<Rule>) -> Result<HashMap<&str, String>, ()> {
-    let mut about_section: HashMap<&str, String> = HashMap::new();
+fn parse_about(rule: Pair<Rule>, about: &mut About) -> Result<(), ()> {
     for inner_rule in rule.into_inner() {
         match inner_rule.as_rule() {
             Rule::email => {
-                about_section.insert("email", get_value(inner_rule)?.to_owned());
+                about.email = get_value(inner_rule)?.to_owned();
             }
             Rule::phone => {
-                about_section.insert("phone", get_value(inner_rule)?.to_owned());
+                about.phone = get_value(inner_rule)?.to_owned();
             }
             _ => unreachable!(),
         }
     }
-    Ok(about_section)
+    Ok(())
 }
 
 fn main() -> Result<(), ()> {
     let unparsed_file = read_file("cv.ini")?;
     let file = parse_file(&unparsed_file)?;
-    let mut properties: HashMap<&str, HashMap<&str, String>> = HashMap::new();
+    let mut cv_data: CVData = CVData::new();
     for line in file.into_inner() {
         match line.as_rule() {
-            Rule::about => {
-                properties.insert("about", parse_about(line)?);
-            }
+            Rule::about => parse_about(line, &mut cv_data.about)?,
             Rule::EOI => (),
             _ => unreachable!(),
         }
     }
-    println!("{:#?}", properties);
+    println!("{:#?}", cv_data);
     Ok(())
 }
