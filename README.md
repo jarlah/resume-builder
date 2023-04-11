@@ -8,7 +8,7 @@ Program will output:
 CVData {
     about: About {
         phone: "+47 12345678",
-        email: "testsdsad@asdddas.com",
+        email: "test.user_name+spam@sub.domain.example-site.co.uk",
     },
 }
 ```

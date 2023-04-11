@@ -2,15 +2,11 @@ cv = {
     SOI ~ about ~ EOI
 }
 
-about = { ^"[about]" ~ NEWLINE ~ email ~ NEWLINE ~ phone }
-email = { ^"email" ~ "=" ~ email_value }
-phone = { ^"phone" ~ "=" ~ phone_value }
-
-phone_value = { ("+" ~ NUMBER{1, 2} ~ WHITESPACE? ~ NUMBER*) | NUMBER* }
-
-email_username  = { (ASCII_ALPHANUMERIC | "." | "+" | "-" | "_")* }
-email_domain    = { ASCII_ALPHANUMERIC* }
-email_extension = { ASCII_ALPHA{2, 3} }
-email_value     = { email_username ~ "@" ~ email_domain ~ "." ~ email_extension }
-
+about      =  { ^"[about]" ~ NEWLINE ~ email ~ NEWLINE ~ phone }
+email      =  { ^"email" ~ "=" ~ email_spec }
+phone      =  { ^"phone" ~ "=" ~ phone_spec }
+phone_spec =  { ("+" ~ NUMBER{1, 2} ~ WHITESPACE? ~ NUMBER*) | NUMBER* }
+email_spec =  { localname ~ "@" ~ domain }
+localname  =  { (ASCII_ALPHANUMERIC | "." | "+" | "-" | "_")+ }
+domain     =  { (ASCII_ALPHANUMERIC | "." | "-")+ }
 WHITESPACE = _{ " " }
