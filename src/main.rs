@@ -1,7 +1,7 @@
+use async_std::prelude::*;
 use shellfish::{app, Command, Shell};
 use std::error::Error;
-use async_std::prelude::*;
- 
+
 extern crate async_std;
 
 #[macro_use]
@@ -14,18 +14,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     shell.commands.insert(
         "cat",
-        Command::new_async(
-            "Displays a file.".to_string(),
-            async_fn!(u64, cat)
-        ),
+        Command::new_async("Displays a file.".to_string(), async_fn!(u64, cat)),
     );
 
     // Check if we have > 2 args, if so no need for interactive shell
     let mut args = std::env::args();
     if args.nth(1).is_some() {
         // Create the app from the shell.
-        let mut app: app::App<u64, _> =
-            app::App::try_from_async(shell)?;
+        let mut app: app::App<u64, _> = app::App::try_from_async(shell)?;
 
         // Set the binary name
         app.handler.proj_name = Some("shellfish-example".to_string());
@@ -50,7 +46,7 @@ async fn cat(_state: &mut u64, args: Vec<String>) -> Result<(), Box<dyn Error>> 
         file.read_to_string(&mut contents).await?;
         println!("{}", contents);
     }
-    
+
     Ok(())
 }
 
