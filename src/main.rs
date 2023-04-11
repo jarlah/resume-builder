@@ -3,7 +3,6 @@ use std::fs;
 
 use crate::parser::CVData;
 
-pub struct CVParser;
 fn read_file(file: &str) -> Result<String, ()> {
     fs::read_to_string(file).map_err(|err| eprintln!("ERROR: Failed to read file: {err}"))
 }
